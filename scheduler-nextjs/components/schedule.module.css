@@ -1,0 +1,7 @@
+/* Component level styling */
+
+.timeslot {
+  width: 4rem;
+  height: 1.5rem;
+  border: solid 1px red;
+}
