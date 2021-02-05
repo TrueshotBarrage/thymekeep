@@ -2,7 +2,7 @@
 import React from "react"
 import Link from "next/link"
 import { withRouter } from "next/router"
-import { TabHead, TabContainer, TabBody, Tab } from "./tabsStyled"
+import styles from "./tabs.module.css"
 
 const Tabs = ({ router }) => {
   const {
@@ -13,25 +13,25 @@ const Tabs = ({ router }) => {
   const isTabTwo = tab === "2"
 
   return (
-    <TabContainer>
-      <TabHead>
-        <Tab>
+    <div className={styles.TabContainer}>
+      <div className={styles.TabHead}>
+        <div className={styles.Tab} selected={isTabOne}>
           <Link href={{ pathname: "/profile", query: { tab: "1" } }}>
             <a>My Events</a>
           </Link>
-        </Tab>
-        <Tab>
+        </div>
+        <div className={styles.Tab} selected={isTabTwo}>
           <Link href={{ pathname: "/profile", query: { tab: "2" } }}>
             <a>Calendar</a>
           </Link>
-        </Tab>
-      </TabHead>
-      <TabBody>
+        </div>
+      </div>
+      <div className={styles.TabBody}>
         {isTabOne && <>**list here of all events coming this following week**</>}
         {isTabTwo && <>**calender here that shows all events based on day, week,
         month**</>}
-      </TabBody>
-    </TabContainer>
+      </div>
+    </div>
   )
 }
 
