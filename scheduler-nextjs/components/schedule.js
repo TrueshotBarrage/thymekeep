@@ -12,12 +12,15 @@ class TimeSlot extends Component {
 
   render() {
     const time = this.props.time;
+    // We will use getDay() later for absolute dates & such
+    const day = this.props.day;
+
     return (
       <div
         className={styles.timeslot}
         onClick={() => this.timeslotClicked(time)}
       >
-        {time} AM
+        D{day}, H{time}
       </div>
     );
   }
@@ -27,16 +30,36 @@ class TimeSlot extends Component {
  * Schedule is the top-level schedule component. It displays an interactive 
  * schedule based on the user's availabilities.
  */
-export default function Schedule() {
-  // Hardcoded for now as an example
-  const schedule = [];
-  for (let i = 1; i <= 12; i++) {
-    schedule.push(<TimeSlot time={i} />);
+class Schedule extends Component {
+  renderDay(i, hours, days) {
+    const schedule = [];
+    for (let j = 1; j <= hours; j++) {
+      schedule.push(<TimeSlot key={`${i},${j}`} day={i} time={j} />);
+    }
+
+    return (
+      <div className={styles.time} style={{ flexBasis: `${100 / days}%` }}>
+        {schedule}
+      </div>
+    )
   }
 
-  return (
-    <div>
-      {schedule}
-    </div>
-  );
+  render() {
+    // Hardcoded for now as an example
+    const days = 4;
+    const hours = 12;
+    const schedule = [];
+
+    for (let i = 0; i < days; i++) {
+      schedule.push(this.renderDay(i, hours, days));
+    }
+
+    return (
+      <div className={styles.day}>
+        {schedule}
+      </div>
+    );
+  }
 }
+
+export default Schedule;

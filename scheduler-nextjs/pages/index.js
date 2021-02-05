@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className={utilStyles.centered}>
       <h2>
-        <Link href="/openProfile">
+        <Link href="/profile">
           <a>Profile</a>
         </Link>
       </h2>
