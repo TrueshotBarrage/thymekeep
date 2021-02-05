@@ -2,7 +2,7 @@
 import React from "react"
 import Link from "next/link"
 import { withRouter } from "next/router"
-import { TabHead, TabContainer, TabBody, Tab } from "./styles"
+import { TabHead, TabContainer, TabBody, Tab } from "./tabsStyled"
 
 const Tabs = ({ router }) => {
   const {
@@ -16,13 +16,13 @@ const Tabs = ({ router }) => {
     <TabContainer>
       <TabHead>
         <Tab>
-          <Link href={{ pathname: "/openProfile", query: { tab: "1" } }}>
+          <Link href={{ pathname: "/profile", query: { tab: "1" } }}>
             <a>My Events</a>
           </Link>
         </Tab>
         <Tab>
-          <Link href={{ pathname: "/openProfile", query: { tab: "2" } }}>
-            <a>Calender</a>
+          <Link href={{ pathname: "/profile", query: { tab: "2" } }}>
+            <a>Calendar</a>
           </Link>
         </Tab>
       </TabHead>
