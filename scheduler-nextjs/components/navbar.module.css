@@ -1,0 +1,29 @@
+.container {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: "logo navbar";
+  column-gap: 400px;
+  /* border: solid 1px red; */
+}
+
+.logo {
+  grid-area: logo;
+  justify-self: center;
+  padding: 50px 20px 20px;
+}
+
+.navbar {
+  grid-area: navbar;
+  justify-self: right;
+  padding: 50px 50px 50px;
+}
+
+.navbar a {
+  padding: 0px 20px 20px;
+  transition: 0.2s ease-in;
+}
+
+.navbar a:hover {
+  color: rgb(72, 97, 182);
+}

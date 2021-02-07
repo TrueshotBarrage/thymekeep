@@ -1,15 +1,17 @@
 .TabHead {
   border-bottom: 1px solid black;
   display: flex;
-  background: black;
+  background: white;
+  justify-content: center;
 }
 
 .TabContainer {
-  width: 30em;
+  width: 49em;
   height: 30em;
   -webkit-box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
   -moz-box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
   box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
+  margin: auto;
 }
 
 .TabBody {
@@ -20,5 +22,5 @@
 
 .Tab {
   padding: 1em;
-  background: gray;
+  background: rgb(194, 194, 194);
 }
