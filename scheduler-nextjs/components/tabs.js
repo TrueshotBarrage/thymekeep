@@ -16,12 +16,12 @@ const Tabs = ({ router }) => {
     <div className={styles.TabContainer}>
       <div className={styles.TabHead}>
         <div className={styles.Tab} selected={isTabOne}>
-          <Link href={{ pathname: "/profile", query: { tab: "1" } }}>
+          <Link href={{ pathname: "/profilepage", query: { tab: "1" } }}>
             <a>My Events</a>
           </Link>
         </div>
         <div className={styles.Tab} selected={isTabTwo}>
-          <Link href={{ pathname: "/profile", query: { tab: "2" } }}>
+          <Link href={{ pathname: "/profilepage", query: { tab: "2" } }}>
             <a>Calendar</a>
           </Link>
         </div>
