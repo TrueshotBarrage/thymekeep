@@ -24,3 +24,22 @@
   border-radius: 20px;
   background: white;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 1fr;
+  grid-template-areas: "image info";
+  column-gap: 20px;
+}
+
+.image {
+  grid-area: image;
+  margin-left: 20px;
+  margin-top: 20px;
+  max-width: 50px;
+}
+
+.info {
+  grid-area: info;
+}
