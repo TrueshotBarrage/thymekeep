@@ -11,7 +11,7 @@ export default async (_, res) => {
   // Generate a url that asks permissions for Google Calendar scope
   const url = googleAuth.generateAuthUrl({
     access_type: "offline", // 'online' (def) or 'offline' (gets refresh_token)
-    scope: "https://www.googleapis.com/auth/calendar"
+    scope: "https://www.googleapis.com/auth/calendar openid email profile"
   });
 
   // Set response headers & information

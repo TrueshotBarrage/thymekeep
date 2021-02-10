@@ -5,7 +5,7 @@ import styles from "./navbar.module.css"
 
 const navbarItems = [
   '/',
-  '/profilepage',
+  '/profile',
   '/login'
 ];
 const navbarNames = [
