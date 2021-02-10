@@ -9,7 +9,8 @@ class Navbar extends Component {
         <div className={styles.logo}>Scheduler-JK</div>
         <div className={styles.navbar}>
           <Link href="/"><a>Home</a></Link>
-          <Link href="../profilepage"><a>Profile</a></Link>
+          <Link href="/profile"><a>Profile</a></Link>
+          <Link href="/login"><a>Login</a></Link>
         </div>
       </div>
     );

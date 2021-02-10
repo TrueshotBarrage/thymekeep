@@ -38,7 +38,7 @@ class Schedule extends Component {
     }
 
     return (
-      <div className={styles.time} style={{ flexBasis: `${100 / days}%` }}>
+      <div key={`day${i}`} className={styles.time} style={{ flexBasis: `${100 / days}%` }}>
         {schedule}
       </div>
     )

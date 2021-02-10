@@ -16,5 +16,5 @@ export default async (_, res) => {
 
   // Set response headers & information
   res.statusCode = 200;
-  res.json({ data: url });
+  res.json({ url: url });
 }
