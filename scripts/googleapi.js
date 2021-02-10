@@ -1,7 +1,6 @@
 import { google } from "googleapis";
 
-export default async (_, res) => {
-  // Set up Google API OAuth2 client
+export default function test() {
   const googleAuth = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
@@ -14,7 +13,5 @@ export default async (_, res) => {
     scope: "https://www.googleapis.com/auth/calendar"
   });
 
-  // Set response headers & information
-  res.statusCode = 200;
-  res.json({ data: url });
+  console.log(url);
 }
