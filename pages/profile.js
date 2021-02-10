@@ -6,14 +6,12 @@ import Navbar from '../components/navbar'
 
 export default function Start() {
   return (
-    <>
-      <div>
-        <Navbar />
-      </div>
+    <div>
+      <Navbar />
       <div className={utilStyles.centered}>
         <Profile />
       </div>
-    </>
+    </div>
   )
 
 }
