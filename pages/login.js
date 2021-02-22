@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 const axios = require("axios");
 
-// Here you would fetch and return the user
+// TODO: Here you would fetch and return the user
 const useUser = () => ({ user: null, loading: false })
 
 // Get the OAuth URL from our server API
@@ -11,8 +11,8 @@ const getGoogleSignInURL = async function () {
     try {
       const response = await axios.get("/api/googleapi");
       return response.data.url;
-    } catch (error) {
-      console.log(error.response.body);
+    } catch (err) {
+      console.error(err);
     }
   })();
   return url;
@@ -30,5 +30,5 @@ export default function Login() {
     }
   }, [user, loading]);
 
-  return <p>Redirecting...</p>;
+  return <p>Redirecting to Google's servers...</p>;
 }
