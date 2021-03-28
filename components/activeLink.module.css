@@ -1,0 +1,28 @@
+.tab {
+  padding: 7px 20px 9px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 45px;
+  text-align: center;
+  transition: all 0.2s ease-in;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(17, 151, 57);
+  color: rgb(0, 0, 0);
+}
+
+.tabActive {
+  padding: 7px 20px 9px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 35px;
+  text-align: center;
+  transition: all 0.2s ease-in;
+  background-color: rgb(17, 151, 57);
+  color: #fff;
+}
+
+.tab:hover {
+  border-radius: 35px;
+  background-color: rgb(17, 151, 57);
+  color: #fff;
+}

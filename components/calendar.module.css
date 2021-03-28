@@ -1,0 +1,33 @@
+.container {
+  width: 400px;
+  border: 1px solid lightgrey;
+  box-shadow: 2px 2px 2px #eee;
+}
+
+.header {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 10px 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #f5f6fa;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.body {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day {
+  width: 14.2%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

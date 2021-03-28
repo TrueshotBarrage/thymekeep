@@ -1,16 +1,29 @@
-import Schedule from '../components/schedule'
-import utilStyles from '../styles/utils.module.css'
-import Layout from '../components/layout'
+import Schedule from "../components/schedule";
+import Layout from "../components/layout";
+import styles from "../styles/utils.module.css";
+import { useSession } from "next-auth/client";
+import React from "react";
 
-const name = "Dave"
+export default function Index() {
+  const [session, loading] = useSession();
 
-const Index = () => (
-  <Layout>
-    <div className={utilStyles.centered}>
-      <h1>Schedule for {name}</h1>
-      <Schedule />
-    </div>
-  </Layout>
-)
-
-export default Index
+  return (
+    <>
+      {!session && (
+        <Layout>
+          <div className={styles.mainBody}>
+            <div className={styles.mainTitle}>Welcome to ThymeKeep!</div>
+            <div className={styles.mainText}>
+              Create a schedule to send to your group
+            </div>
+          </div>
+        </Layout>
+      )}
+      {session && (
+        <Layout>
+          <Schedule />
+        </Layout>
+      )}
+    </>
+  );
+}

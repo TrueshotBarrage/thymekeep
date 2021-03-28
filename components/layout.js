@@ -1,71 +1,43 @@
+import React from "react";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/client";
 import styles from "./layout.module.css";
+import ActiveLink from "./activeLink";
+import { useSession, signIn, signOut } from "next-auth/client";
 
-const Layout = function ({ children }) {
+const Layout = ({ children, className }) => {
   const [session, loading] = useSession();
 
-  return (
-    <p
-      className={`nojs-show ${
-        !session && loading ? styles.loading : styles.loaded
-      }`}
-    >
-      {!session && (
-        <>
-          <span className={styles.notSignedInText}>You are not signed in</span>
-          <a
-            href={`/api/auth/signin`}
-            className={styles.buttonPrimary}
-            onClick={(e) => {
-              e.preventDefault();
-              signIn();
-            }}
-          >
-            Sign in
-          </a>
-        </>
-      )}
-      {session && (
-        <>
-          {session.user.image && (
-            <span
-              style={{ backgroundImage: `url(${session.user.image})` }}
-              className={styles.avatar}
-            />
-          )}
-          <span className={styles.signedInText}>
-            <small>Signed in as</small>
-            <br />
-            <strong>{session.user.email || session.user.name}</strong>
-          </span>
-          <a
-            href={`/api/auth/signout`}
-            className={styles.button}
-            onClick={(e) => {
-              e.preventDefault();
-              signOut();
-            }}
-          >
-            Sign out
-          </a>
-        </>
-      )}
+  if (session) {
+    return (
       <header className={styles.container}>
         <div className={styles.logo}>
-          <Link href="/">Scheduler-JK</Link>
+          <Link href="/">ThymeKeep</Link>
         </div>
-
         <nav className={styles.navbar}>
-          <Link href="/">Home</Link>
-          <Link href="/profile/events">Profile</Link>
-          <Link href="/login">Login</Link>
+          <ActiveLink href="/">Home</ActiveLink>
+          {/* Clicking on the profile button load user onto profile page, defaulted
+          to the events tab */}
+          <ActiveLink href="/profile/events">Profile</ActiveLink>
+          <button onClick={() => signOut()}>Log Out</button>
         </nav>
         <div className={styles.body}>
           <div>{children}</div>
         </div>
       </header>
-    </p>
+    );
+  }
+  return (
+    <header className={styles.container}>
+      <div className={styles.logo}>
+        <Link href="/">ThymeKeep</Link>
+      </div>
+      <nav className={styles.navbar}>
+        <button onClick={signIn}>Login</button>
+      </nav>
+      <div className={styles.body}>
+        <div>{children}</div>
+      </div>
+    </header>
   );
 };
 

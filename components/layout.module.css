@@ -1,10 +1,8 @@
 .container {
   display: grid;
-  grid-template-columns: 20% 50% 30%;
-  grid-template-rows: auto;
-  grid-template-areas:
-  "logo . navbar"
-  ". body .";
+  grid-template-columns: [line0] 25% [line1] 50% [line2] 25% [line3];
+  grid-template-rows: [row1-start] 150px [row1-end row2-start] 50px [row2-end row3-start] auto [row3-end];
+  grid-template-areas: "logo . navbar" ". . ." ". body .";
   /* column-gap: 400px; */
   /* border: solid 1px red; */
 }
@@ -12,37 +10,24 @@
 .logo {
   grid-area: logo;
   justify-self: center;
-  padding: 50px 20px 20px;
+  align-self: center;
+  position: sticky;
+  top: 50px;
+  color: white;
+  font-size: 20px;
 }
 
 .body {
-  grid-area: body;
-  justify-self:center;
+  grid-area: row2-start / line0 / row3-end / line3;
+  width: 100%;
+  justify-self: center;
+  justify-items: center;
 }
 
 .navbar {
   grid-area: navbar;
-  justify-self: right;
-  padding: 50px 50px 50px;
-}
-
-.navbar a {
-  padding: 12px 20px 17px;
-  margin-left: 20px;
-  border-radius: 25px;
-  text-align: center;
-  transition: all 0.2s ease-in;
-  -webkit-box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
-  -moz-box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
-  box-shadow: -1px 0px 5px 0px rgba(184, 184, 184, 1);
-}
-
-.navbar a:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-.active {
-  background-color: #333;
-  color: #fff;
+  justify-self: center;
+  align-self: center;
+  position: sticky;
+  top: 50px;
 }
