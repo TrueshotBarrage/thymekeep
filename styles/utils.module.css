@@ -6,6 +6,28 @@
   border: 1px solid blue;
 }
 
+.mainTitle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: 200;
+  color: white;
+  letter-spacing: -3px;
+}
+
+.mainText {
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-weight: 150;
+  color: white;
+}
 /* Examples */
 
 .heading2Xl {

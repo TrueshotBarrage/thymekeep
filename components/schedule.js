@@ -1,6 +1,10 @@
 import { Component } from "react";
-import styles from "./schedule.module.css"
-import utilStyles from "../styles/utils.module.css"
+import styles from "./schedule.module.css";
+import utilStyles from "../styles/utils.module.css";
+import ActiveLink from "../components/activeLink";
+import { useSession } from "next-auth/client";
+
+const name = "Dave";
 
 /**
  * TimeSlot is a component for each slot of a schedule.
@@ -27,7 +31,7 @@ class TimeSlot extends Component {
 }
 
 /**
- * Schedule is the top-level schedule component. It displays an interactive 
+ * Schedule is the top-level schedule component. It displays an interactive
  * schedule based on the user's availabilities.
  */
 class Schedule extends Component {
@@ -38,10 +42,14 @@ class Schedule extends Component {
     }
 
     return (
-      <div key={`day${i}`} className={styles.time} style={{ flexBasis: `${100 / days}%` }}>
+      <div
+        key={`day${i}`}
+        className={styles.time}
+        style={{ flexBasis: `${100 / days}%` }}
+      >
         {schedule}
       </div>
-    )
+    );
   }
 
   render() {
@@ -53,11 +61,22 @@ class Schedule extends Component {
     for (let i = 0; i < days; i++) {
       schedule.push(this.renderDay(i, hours, days));
     }
-
     return (
-      <div className={styles.day}>
-        {schedule}
-      </div>
+      <>
+        <div className={styles.container}>
+          <div className={styles.user}>
+            <h1>Schedule for {name}</h1>
+          </div>
+          <div className={styles.tabs}>
+            <ActiveLink href="/">Day</ActiveLink>
+            <ActiveLink href="/">Week</ActiveLink>
+            <ActiveLink href="/">Month</ActiveLink>
+          </div>
+          <div className={styles.schedule}>
+            <div className={styles.day}>{schedule}</div>
+          </div>
+        </div>
+      </>
     );
   }
 }

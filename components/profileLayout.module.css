@@ -2,15 +2,16 @@
   display: grid;
   grid-template-columns: 150px auto 150px;
   grid-template-rows: auto;
-  grid-template-areas: 
-  "img body ."
-  ". tabs ."
-  ". tab-info .";
+  grid-template-areas: "img body ." ". tabs ." ". tab-info .";
 }
 
 .proPic {
+  display: flex;
   place-self: center;
   grid-area: img;
+  border: 5px solid black;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .body {
@@ -21,29 +22,6 @@
 .tabs {
   justify-self: center;
   grid-area: tabs;
-}
-.tab {
-  margin-top: 10px;
-  margin-bottom: 50px;
-  padding: 10px;
-  border: solid 4px black;
-  border-radius: 5px;
-  background: rgb(194, 194, 194);
-}
-
-.tabActive {
-  margin-top: 10px;
-  margin-bottom: 50px;
-  padding: 10px;
-  border: solid 4px black;
-  border-radius: 5px;
-  background-color: red;
-}
-.tab:hover {
-  background-color: aqua;
-}
-.tabActive:hover {
-  background-color: aqua;
 }
 
 .tabInfo {

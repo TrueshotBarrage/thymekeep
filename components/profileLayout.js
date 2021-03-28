@@ -1,52 +1,27 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import styles from './profileLayout.module.css';
-
-
-const user = {
-  userID: 123,
-  name: "Justin Kang",
-  email: "jk2375@cornell.edu",
-  schedules: null,
-}
-
-{/* ActiveLink allows for changing of tabs using router */ }
-const ActiveLink = ({ children, href, className }) => {
-  const router = useRouter();
-  return (
-    <Link href={href}>
-      <a className={`${router.pathname === href
-        ? styles.tabActive
-        : styles.tab
-        }`}
-      >
-        {children}
-      </a>
-    </Link>
-
-  );
-};
+import { useRouter } from "next/router";
+import styles from "./profileLayout.module.css";
+import ActiveLink from "./activeLink";
+import { useSession } from "next-auth/client";
 
 const ProfileLayout = ({ children }) => {
+  const [session, loading] = useSession();
+  const profile = session.user.image;
+
   return (
     <div className={styles.container}>
-      <div className={styles.proPic}>img will be here</div>
+      <div className={styles.proPic}>
+        <img src={profile} alt="profile" />
+      </div>
       <div className={styles.body}>
-        <h2>Name: {user.name}</h2>
-        <h2>Email: {user.email}</h2>
+        <h2>Name: {session.user.name}</h2>
+        <h2>Email: {session.user.email}</h2>
       </div>
 
       <div className={styles.tabs}>
-        <ActiveLink href="/profile/events">
-          Events
-        </ActiveLink>
-        <ActiveLink href="/profile/calendar">
-          Calendar
-        </ActiveLink>
+        <ActiveLink href="/profile/events">Events</ActiveLink>
+        <ActiveLink href="/profile/calendar">Calendar</ActiveLink>
       </div>
-      <div className={styles.tabInfo}>
-        {children}
-      </div>
+      <div className={styles.tabInfo}>{children}</div>
     </div>
   );
 };
