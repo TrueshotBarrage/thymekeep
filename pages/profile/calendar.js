@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import Layout from '../../components/layout';
-import ProfileLayout from '../../components/profileLayout';
-import Calendar from '../../components/calendar';
+import Link from "next/link";
+import Layout from "../../components/layout";
+import ProfileLayout from "../../components/profileLayout";
+import Calendar from "../../components/calendar";
 
 const Index = () => (
   <Layout>
@@ -10,6 +10,6 @@ const Index = () => (
       <Calendar />
     </ProfileLayout>
   </Layout>
-)
+);
 
-export default Index
+export default Index;

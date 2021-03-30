@@ -28,7 +28,7 @@ class MyApp extends App {
         }}
         session={pageProps.session}
       >
-        <Component {...pageProps} />;
+        <Component {...pageProps} />
       </Provider>
     );
   }
