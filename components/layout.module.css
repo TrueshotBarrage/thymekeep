@@ -31,3 +31,11 @@
   position: sticky;
   top: 50px;
 }
+
+.loading {
+  opacity: 0
+}
+
+.loaded {
+  opacity: 1
+}
