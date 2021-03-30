@@ -8,7 +8,7 @@ const Layout = ({ children, className }) => {
   const [session, loading] = useSession();
 
   return (
-    <>
+    <div className={!session && loading ? styles.loading : styles.loaded}>
       {session && (
         <>
           <header className={styles.container}>
@@ -41,7 +41,7 @@ const Layout = ({ children, className }) => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 
