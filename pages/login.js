@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 const axios = require("axios");
 
 // TODO: Here you would fetch and return the user
-const useUser = () => ({ user: null, loading: false })
+const useUser = () => ({ user: null, loading: false });
 
 // Get the OAuth URL from our server API
 const getGoogleSignInURL = async function () {
@@ -16,7 +16,7 @@ const getGoogleSignInURL = async function () {
     }
   })();
   return url;
-}
+};
 
 export default function Login() {
   const { user, loading } = useUser();
