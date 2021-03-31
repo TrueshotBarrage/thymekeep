@@ -1,31 +1,6 @@
 // Imports
 const axios = require("axios");
 
-function getAuthTokens(authCode) {
-  const tokenPost = {
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    client_secret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect_uri: process.env.GOOGLE_REDIRECT_URL,
-    grant_type: "authorization_code",
-    code: authCode,
-  };
-
-  // Make POST request to Google's servers to get access & refresh tokens
-  const resp = (async () => {
-    try {
-      const tokenResp = await axios.post(
-        "https://oauth2.googleapis.com/token",
-        tokenPost
-      );
-      return tokenResp;
-    } catch (err) {
-      return err.response.data;
-    }
-  })();
-
-  return resp;
-}
-
 // Make a general GET request to the Google API.
 async function get(accessToken, route) {
   try {
@@ -55,7 +30,7 @@ async function post(accessToken, route, data) {
 }
 
 // Retrieve a user's info.
-async function getUserInfo(accessToken) {
+export async function getUserInfo(accessToken) {
   const userInfo = await get(
     accessToken,
     "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -64,33 +39,45 @@ async function getUserInfo(accessToken) {
 }
 
 // Get a list of the user's calendars.
-async function getCalendarList(accessToken) {
+export async function getCalendarList(accessToken) {
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = "/users/me/calendarList";
   const calendarList = await get(accessToken, `${baseURL}${calendarURL}`);
   return calendarList;
 }
 
-// Get a specific calendar.
-async function getCalendar(accessToken, calendarID) {
+// Get data about a specific calendar.
+export async function getCalendar(accessToken, calendarID) {
+  calendarID = encodeURIComponent(calendarID);
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = `/users/me/calendarList/${calendarID}`;
   const calendar = await get(accessToken, `${baseURL}${calendarURL}`);
   return calendar;
 }
 
+// Get a list of events from a specific calendar.
+export async function getEvents(accessToken, calendarID) {
+  calendarID = encodeURIComponent(calendarID);
+  const baseURL = "https://www.googleapis.com/calendar/v3";
+  const calendarURL = `/calendars/${calendarID}/events`;
+  const events = await get(accessToken, `${baseURL}${calendarURL}`);
+  return events;
+}
+
+// Get data about a specific event from a specific calendar.
+export async function getEvent(accessToken, calendarID, eventID) {
+  calendarID = encodeURIComponent(calendarID);
+  eventID = encodeURIComponent(eventID);
+  const baseURL = "https://www.googleapis.com/calendar/v3";
+  const calendarURL = `/calendars/${calendarID}/events/${eventID}`;
+  const event = await get(accessToken, `${baseURL}${calendarURL}`);
+  return event;
+}
+
 // Post a quick event in a calendar based on text entry.
-async function postQuickEvent(accessToken, calendarID, text) {
+export async function postQuickEvent(accessToken, calendarID, text) {
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = `/users/me/calendarList/${calendarID}/events/quickAdd`;
   const event = await post(accessToken, `${baseURL}${calendarURL}`, text);
   return event;
 }
-
-export {
-  getAuthTokens,
-  getUserInfo,
-  getCalendarList,
-  getCalendar,
-  postQuickEvent,
-};
