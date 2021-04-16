@@ -56,11 +56,32 @@ export async function getCalendar(accessToken, calendarID) {
 }
 
 // Get a list of events from a specific calendar.
-export async function getEvents(accessToken, calendarID) {
+export async function getEvents(
+  accessToken,
+  calendarID,
+  pageToken,
+  timeMin,
+  timeMax
+) {
   calendarID = encodeURIComponent(calendarID);
+
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = `/calendars/${calendarID}/events`;
-  const events = await get(accessToken, `${baseURL}${calendarURL}`);
+
+  const params = new URLSearchParams();
+  if (pageToken) {
+    params.append("pageToken", pageToken);
+  }
+  if (timeMin) {
+    params.append("timeMin", timeMin);
+  }
+  if (timeMax) {
+    params.append("timeMax", timeMax);
+  }
+  const paramsString = params.toString();
+  const paramsURL = paramsString ? `?${paramsString}` : "";
+
+  const events = await get(accessToken, `${baseURL}${calendarURL}${paramsURL}`);
   return events;
 }
 
@@ -68,8 +89,10 @@ export async function getEvents(accessToken, calendarID) {
 export async function getEvent(accessToken, calendarID, eventID) {
   calendarID = encodeURIComponent(calendarID);
   eventID = encodeURIComponent(eventID);
+
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = `/calendars/${calendarID}/events/${eventID}`;
+
   const event = await get(accessToken, `${baseURL}${calendarURL}`);
   return event;
 }

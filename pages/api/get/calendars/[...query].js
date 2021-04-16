@@ -10,7 +10,9 @@ export default async (req, res) => {
   if (token) {
     const accessToken = token.accessToken;
 
-    let { query } = req.query;
+    // pageToken is used if there are too many events to query for a calendar
+    let { query, pageToken, timeMin, timeMax } = req.query;
+
     if (!query) {
       res.status(500).send("Invalid API call, maybe empty route?");
       return;
@@ -22,8 +24,14 @@ export default async (req, res) => {
       case 1: // e.g. /api/get/calendars/{cid}
         resp = await getCalendar(accessToken, query[0]);
         break;
-      case 2: // e.g. /api/get/calendars/{cid}/events
-        resp = await getEvents(accessToken, query[0]);
+      case 2: // e.g. /api/get/calendars/{cid}/events?pageToken={token}
+        resp = await getEvents(
+          accessToken,
+          query[0],
+          pageToken,
+          timeMin,
+          timeMax
+        );
         break;
       case 3: // e.g. /api/get/calendars/{cid}/events/{eid}
         if (query[1] === "events") {
@@ -39,7 +47,7 @@ export default async (req, res) => {
 
     if (resp.error) {
       res.status(resp.error.code).json(resp.error.message);
-    } else if (resp.status) {
+    } else if (resp.status && resp.status !== 500) {
       res.status(resp.status).json(resp.data);
     }
   } else {

@@ -1,5 +1,68 @@
+import axios from "axios";
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+
+const GOOGLE_AUTHORIZATION_URL =
+  "https://accounts.google.com/o/oauth2/v2/auth?" +
+  new URLSearchParams({
+    prompt: "consent",
+    access_type: "offline",
+    response_type: "code",
+  });
+
+/**
+ * Takes a token, and returns a new token with updated
+ * `accessToken` and `accessTokenExpires`. If an error occurs,
+ * returns the old token and an error property
+ */
+async function refreshAccessToken(token) {
+  try {
+    const url =
+      "https://oauth2.googleapis.com/token?" +
+      new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      });
+
+    // const response = await fetch(url, {
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   method: "POST",
+    // });
+
+    // const refreshedTokens = await response.json();
+
+    const response = await axios.post(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
+    const refreshedTokens = response.data;
+
+    if (response.status !== 200) {
+      throw refreshedTokens;
+    }
+
+    const newToken = {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      // Fall back to old refresh token
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+    };
+    return newToken;
+  } catch (error) {
+    console.log(error);
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
+  }
+}
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -9,6 +72,7 @@ export default NextAuth({
     Providers.Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorizationUrl: GOOGLE_AUTHORIZATION_URL,
       scope:
         "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
     }),
@@ -75,11 +139,40 @@ export default NextAuth({
     // async signIn(user, account, profile) { return true },
     // async redirect(url, baseUrl) { return baseUrl },
     // async session(session, user) { return session },
+    // async jwt(token, user, account, profile, isNewUser) {
+    //   if (account?.accessToken) {
+    //     token.accessToken = account.accessToken;
+    //   }
+    //   return token;
+    // },
     async jwt(token, user, account, profile, isNewUser) {
-      if (account?.accessToken) {
+      // Initial sign in
+      if (account) {
         token.accessToken = account.accessToken;
+        token.accessTokenExpires = Date.now() + account.expires_in * 1000;
+        token.refreshToken = account.refresh_token;
+        token.user = user;
+
+        return token;
       }
-      return token;
+
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < token.accessTokenExpires) {
+        return token;
+      }
+
+      // Access token has expired, try to update it
+      const newToken = await refreshAccessToken(token);
+      return newToken;
+    },
+    async session(session, token) {
+      if (token) {
+        session.user = token.user;
+        session.accessToken = token.accessToken;
+        session.error = token.error;
+      }
+
+      return session;
     },
   },
 
@@ -88,5 +181,5 @@ export default NextAuth({
   events: {},
 
   // Enable debug messages in the console if you are having problems
-  debug: false,
+  debug: true,
 });
