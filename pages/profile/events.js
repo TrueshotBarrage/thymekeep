@@ -1,12 +1,14 @@
-import Layout from '../../components/layout';
-import ProfileLayout from '../../components/profileLayout';
+import Layout from "../../components/layout";
+import ProfileLayout from "../../components/profileLayout";
+import Event from "../../components/event";
 
 const Index = () => (
   <Layout>
     <ProfileLayout>
-      <p>List of Events will go here</p>
+      <p>This week's events:</p>
+      <Event />
     </ProfileLayout>
   </Layout>
-)
+);
 
-export default Index
+export default Index;

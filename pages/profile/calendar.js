@@ -6,7 +6,7 @@ import Calendar from "../../components/calendar";
 const Index = () => (
   <Layout>
     <ProfileLayout>
-      <p>Calendar will go here</p>
+      <p>List of your calendars:</p>
       <Calendar />
     </ProfileLayout>
   </Layout>

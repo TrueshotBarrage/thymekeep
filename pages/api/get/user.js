@@ -13,7 +13,7 @@ export default async (req, res) => {
 
     if (resp.error) {
       res.status(resp.error.code).json(resp.error.message);
-    } else if (resp.status) {
+    } else if (resp.status && resp.status !== 500) {
       res.status(resp.status).json(resp.data);
     }
   } else {
