@@ -41,6 +41,11 @@ const Layout = ({ children, className }) => {
           </div>
         </>
       )}
+      <div className={styles.footerBorder}></div>
+      <footer className={styles.footer}>
+        <Link href="/tos">Terms of Service</Link>
+        <Link href="/privacy">Privacy Policy</Link>
+      </footer>
     </div>
   );
 };

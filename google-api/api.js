@@ -55,7 +55,7 @@ export async function getCalendar(accessToken, calendarID) {
   return calendar;
 }
 
-// Get a list of events from a specific calendar.
+// Get a list of events from a specific calendar. Time in UTC
 export async function getEvents(
   accessToken,
   calendarID,
@@ -78,6 +78,12 @@ export async function getEvents(
   if (timeMax) {
     params.append("timeMax", timeMax);
   }
+
+  // Order the events by start time
+  params.append("singleEvents", "true");
+  params.append("orderBy", "startTime");
+  params.append("timeZone", "UTC");
+
   const paramsString = params.toString();
   const paramsURL = paramsString ? `?${paramsString}` : "";
 
@@ -85,7 +91,7 @@ export async function getEvents(
   return events;
 }
 
-// Get data about a specific event from a specific calendar.
+// Get data about a specific event from a specific calendar. Time in UTC
 export async function getEvent(accessToken, calendarID, eventID) {
   calendarID = encodeURIComponent(calendarID);
   eventID = encodeURIComponent(eventID);
@@ -93,7 +99,7 @@ export async function getEvent(accessToken, calendarID, eventID) {
   const baseURL = "https://www.googleapis.com/calendar/v3";
   const calendarURL = `/calendars/${calendarID}/events/${eventID}`;
 
-  const event = await get(accessToken, `${baseURL}${calendarURL}`);
+  const event = await get(accessToken, `${baseURL}${calendarURL}?timeZone=UTC`);
   return event;
 }
 

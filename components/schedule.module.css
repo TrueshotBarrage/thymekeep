@@ -22,20 +22,55 @@
   grid-area: Schedule;
   width: 90%;
   justify-self: center;
+  display: grid;
+  grid-template-columns: 100px auto;
+  margin-bottom: 100px;
 }
 
-.timeslot {
+.leftColumn {
+  display: grid;
+  grid-template-rows: 40px auto;
+  text-align: right;
+}
+
+.rightColumn {
+  display: grid;
+  grid-template-rows: 40px auto;
+}
+
+.timeslot,
+.timeslot30 {
   width: 100%;
   text-align: center;
   height: 1.5rem;
-  border: solid 1px rgb(255, 255, 255);
+  box-shadow: 1px 1px 0 #aaaaaa inset;
 }
 
-.time {
-  width: 100%;
+.timeslot {
+  background-color: rgb(248, 230, 230);
 }
 
-.day {
+.timeslot30 {
+  background-color: rgb(255, 250, 250);
+}
+
+.singleDay {
+  margin: 0px;
+}
+
+.weeklySchedule {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0px;
+  border-right: solid 1px #aaaaaa;
+  border-bottom: solid 1px #aaaaaa;
+}
+
+.dayLabels {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -43,4 +78,34 @@
   width: 90%;
   margin: 0 auto;
   padding: 10px;
+}
+
+.dayLabel {
+  text-align: center;
+}
+
+.timeLabels {
+}
+
+.timeLabel {
+  height: 3rem;
+}
+
+.eventContainer {
+  position: relative;
+}
+
+.event {
+  position: absolute;
+  width: 99%;
+  left: 0;
+  z-index: 1;
+  margin: 0 0.5%;
+  padding: 3px 5px;
+  border: solid 1px #88948f;
+  color: #ffffff;
+  background-color: #9bc89a;
+  border-radius: 5px;
+  hyphens: auto;
+  overflow: hidden;
 }

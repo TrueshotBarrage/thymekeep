@@ -13,8 +13,9 @@
   align-self: center;
   position: sticky;
   top: 50px;
-  color: white;
+  color: #000000;
   font-size: 20px;
+  font-weight: bold;
 }
 
 .body {
@@ -33,9 +34,26 @@
 }
 
 .loading {
-  opacity: 0
+  opacity: 0;
 }
 
 .loaded {
-  opacity: 1
+  opacity: 1;
+}
+
+.footerBorder {
+  padding-top: 20px;
+  border-top: 1px solid #cfcfcf;
+}
+
+.footer {
+  width: 500px;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.footer > * {
+  margin: 0 20px;
 }

@@ -163,10 +163,10 @@ class Event extends Component {
     return (
       <ol>
         {events.map((evt) =>
-          evt.status === "confirmed" ? (
+          evt.status === "confirmed" && evt.start.dateTime ? (
             <li
               key={evt.id}
-            >{`${evt.summary} - ${evt.start?.dateTime} ~ ${evt.end?.dateTime}`}</li>
+            >{`${evt.summary} - ${evt.start.dateTime} ~ ${evt.end.dateTime}`}</li>
           ) : (
             <React.Fragment key={evt.id}></React.Fragment>
           )
