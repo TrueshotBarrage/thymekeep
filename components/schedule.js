@@ -203,7 +203,6 @@ class Schedule extends Component {
     const eventStart = new Date(event.start.dateTime);
     const eventEnd = new Date(event.end.dateTime);
 
-    // TODO: Replace timeMin -> this.state.timeMin once state set up
     const timeMin = this.state.timeMin;
 
     // TODO: Replace hardcoded timeStart with state param
@@ -227,6 +226,13 @@ class Schedule extends Component {
       heightOffset: (eventEnd - eventStart) / 1000 / 60 / 30,
       eventName: event.summary,
     };
+
+    if (slotData.slot < 0) {
+      slotData.heightOffset =
+        slotData.slot + slotData.startOffset + slotData.heightOffset;
+      slotData.slot = 0;
+      slotData.startOffset = 0;
+    }
 
     return slotData;
   }
@@ -274,11 +280,11 @@ class Schedule extends Component {
     const todaySlotEvents = this.state.slotEvents.filter(
       (evt) => evt.day === day
     );
-    let i = 0;
 
+    let i = 0;
     for (let slot = 0; slot < hours * 2; slot++) {
-      const isCurrentSlot = slot === todaySlotEvents[i]?.slot;
-      const eventComponent = isCurrentSlot ? (
+      const slotContainsEvent = slot === todaySlotEvents[i]?.slot;
+      const eventComponent = slotContainsEvent ? (
         <div key={slot} className={styles.eventContainer}>
           <div
             key={slot}
@@ -308,7 +314,7 @@ class Schedule extends Component {
         </div>
       );
       schedule.push(eventComponent);
-      if (isCurrentSlot) i++;
+      if (slotContainsEvent) i++;
     }
 
     return (
@@ -324,20 +330,21 @@ class Schedule extends Component {
 
   createDayLabels(timeMin, timeMax) {
     const labels = [];
-    const timeMinDate = timeMin.getDate();
-    const timeMaxDate = timeMax.getDate();
-    const numDays = timeMinDate - timeMaxDate;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const numDays = Math.round((timeMax - timeMin) / oneDay);
 
-    for (let date = timeMinDate; date <= timeMaxDate; date++) {
+    for (let i = 0; i < numDays; i++) {
+      const today = new Date();
+      today.setDate(timeMin.getDate() + i);
+      const date = today.getDate();
+
       const label = (
         <div
           key={`day${date}`}
           className={styles.dayLabel}
           style={{ flexBasis: `${100 / numDays}%` }}
         >
-          {`${daysOfWeek[
-            (timeMin.getDay() + date + timeMinDate - 1) % 7
-          ].substring(0, 3)} ${date}`}
+          {`${daysOfWeek[today.getDay() % 7].substring(0, 3)} ${date}`}
         </div>
       );
       labels.push(label);
@@ -366,9 +373,8 @@ class Schedule extends Component {
     const { timeMin, timeMax, slotEvents } = this.state;
 
     if (timeMin && timeMax && slotEvents) {
-      const initDay = timeMin.getDate();
-      const finalDay = timeMax.getDate();
-      const days = finalDay - initDay + 1;
+      const oneDay = 24 * 60 * 60 * 1000;
+      const numDays = Math.round((timeMax - timeMin) / oneDay);
       const hours = 14; // For now, we have 14 hours in a day
       const timeStart = 9; // For now, start at 9am hardcoded
       const schedule = [];
@@ -379,8 +385,8 @@ class Schedule extends Component {
 
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      for (let i = 0; i < days; i++) {
-        schedule.push(this.renderDay(i, hours, days, timeStart));
+      for (let i = 0; i < numDays; i++) {
+        schedule.push(this.renderDay(i, hours, numDays, timeStart));
       }
 
       return (
