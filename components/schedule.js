@@ -83,11 +83,11 @@ class Schedule extends Component {
   findWeekBoundaries() {
     // Set boundary times for this week
     const now = new Date();
-    const firstDay = now.getDate() - now.getDay();
+    let firstDay = now.getDate() - now.getDay();
 
     // Logic to find this past Sunday & this Saturday
     const thisSunday = new Date(now.setDate(firstDay));
-    const thisSaturday = new Date(now.setDate(firstDay + 6));
+    const thisSaturday = new Date(now.setDate(thisSunday.getDate() + 6));
 
     // Set the times to be as extensive as possible (12:00AM ~ 11:59PM)
     thisSunday.setHours(0, 0, 0, 0);
