@@ -87,7 +87,9 @@ class Schedule extends Component {
 
     // Logic to find this past Sunday & this Saturday
     const thisSunday = new Date(now.setDate(firstDay));
+    // console.log(thisSunday);
     const thisSaturday = new Date(now.setDate(thisSunday.getDate() + 6));
+    // console.log(thisSaturday);
 
     // Set the times to be as extensive as possible (12:00AM ~ 11:59PM)
     thisSunday.setHours(0, 0, 0, 0);
@@ -227,11 +229,28 @@ class Schedule extends Component {
       eventName: event.summary,
     };
 
+    // If the range of dates crosses two months, we should add the number of
+    // days in the first month to calculate the correct day of each event.
+    if (slotData.day < 0) {
+      const month = timeMin.getMonth();
+      const year = timeMin.getFullYear();
+      const numDaysInMonth = new Date(year, month + 1, 0).getDate();
+      slotData.day = slotData.day + numDaysInMonth;
+    }
+
+    // If an event's time/duration overflows into the range of times available,
+    // we should still display what is left.
     if (slotData.slot < 0) {
       slotData.heightOffset =
         slotData.slot + slotData.startOffset + slotData.heightOffset;
       slotData.slot = 0;
       slotData.startOffset = 0;
+    }
+
+    // If the new (or old) height of the slot event is not a valid height,
+    // then discard the event.
+    if (slotData.heightOffset <= 0) {
+      return null;
     }
 
     return slotData;
@@ -278,7 +297,7 @@ class Schedule extends Component {
     const schedule = [];
 
     const todaySlotEvents = this.state.slotEvents.filter(
-      (evt) => evt.day === day
+      (evt) => evt?.day === day
     );
 
     let i = 0;
@@ -333,9 +352,10 @@ class Schedule extends Component {
     const oneDay = 24 * 60 * 60 * 1000;
     const numDays = Math.round((timeMax - timeMin) / oneDay);
 
+    let firstDay = new Date(timeMin);
     for (let i = 0; i < numDays; i++) {
-      const today = new Date();
-      today.setDate(timeMin.getDate() + i);
+      const today = new Date(firstDay);
+      today.setDate(today.getDate() + i);
       const date = today.getDate();
 
       const label = (
