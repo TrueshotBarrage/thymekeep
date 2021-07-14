@@ -23,7 +23,7 @@
   width: 90%;
   justify-self: center;
   display: grid;
-  grid-template-columns: 100px auto;
+  grid-template-columns: 150px auto;
   margin-bottom: 100px;
 }
 
@@ -38,8 +38,7 @@
   grid-template-rows: 40px auto;
 }
 
-.timeslot,
-.timeslot30 {
+.timeslot, .timeslot30 {
   width: 100%;
   text-align: center;
   height: 1.5rem;
@@ -59,13 +58,13 @@
 }
 
 .weeklySchedule {
+  position: absolute;
+  left: 50px;
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: space-around;
   width: 90%;
-  margin: 0 auto;
-  padding: 0px;
   border-right: solid 1px #aaaaaa;
   border-bottom: solid 1px #aaaaaa;
 }
@@ -76,16 +75,15 @@
   flex-direction: row;
   justify-content: space-around;
   width: 90%;
-  margin: 0 auto;
-  padding: 10px;
+  margin-left: 50px;
+  padding-top: 10px;
 }
 
 .dayLabel {
   text-align: center;
 }
 
-.timeLabels {
-}
+.timeLabels {}
 
 .timeLabel {
   height: 3rem;
@@ -108,4 +106,45 @@
   border-radius: 5px;
   hyphens: auto;
   overflow: hidden;
+}
+
+.scheduleContainer {
+  position: relative;
+}
+
+.timeslotSelectorZone {
+  position: absolute;
+  left: 50px;
+  display: flex;
+  width: 90%;
+  color: transparent;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.timeslotOverlay {
+  height: 1.5rem;
+}
+
+.timeslotOverlay:hover {
+  border: 2px dotted black;
+}
+
+.selectedTimeslot {
+  opacity: 50%;
+  background-color: aqua;
+}
+
+.currentSelectedTimeslot {
+  opacity: 50%;
+  background-color: lightgreen;
+}
+
+.deselectedTimeslot {
+  opacity: 50%;
+  background-color: rgb(255, 136, 136);
+}
+
+.unselectedTimeslot {
+  background-color: transparent;
 }

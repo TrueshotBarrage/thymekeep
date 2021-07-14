@@ -17,9 +17,9 @@ const daysOfWeek = [
 ];
 
 /**
- * TimeSlot is a component for each slot of a schedule.
+ * Timeslot is a component for each slot of a schedule.
  */
-class TimeSlot extends Component {
+class Timeslot extends Component {
   timeslotClicked(time) {
     alert(`Timeslot ${time} was clicked!`);
   }
@@ -87,9 +87,7 @@ class Schedule extends Component {
 
     // Logic to find this past Sunday & this Saturday
     const thisSunday = new Date(now.setDate(firstDay));
-    // console.log(thisSunday);
     const thisSaturday = new Date(now.setDate(thisSunday.getDate() + 6));
-    // console.log(thisSaturday);
 
     // Set the times to be as extensive as possible (12:00AM ~ 11:59PM)
     thisSunday.setHours(0, 0, 0, 0);
@@ -293,7 +291,7 @@ class Schedule extends Component {
     });
   }
 
-  renderDay(day, hours, days, timeStart) {
+  renderDay(day, hours, days, timeStart, slotsPerHour) {
     const schedule = [];
 
     const todaySlotEvents = this.state.slotEvents.filter(
@@ -301,7 +299,7 @@ class Schedule extends Component {
     );
 
     let i = 0;
-    for (let slot = 0; slot < hours * 2; slot++) {
+    for (let slot = 0; slot < hours * slotsPerHour; slot++) {
       const slotContainsEvent = slot === todaySlotEvents[i]?.slot;
       const eventComponent = slotContainsEvent ? (
         <div key={slot} className={styles.eventContainer}>
@@ -315,7 +313,7 @@ class Schedule extends Component {
           >
             {todaySlotEvents[i].eventName}
           </div>
-          <TimeSlot
+          <Timeslot
             key={`${day},${slot}`}
             timeStart={timeStart}
             day={day}
@@ -324,7 +322,7 @@ class Schedule extends Component {
         </div>
       ) : (
         <div key={slot} className={styles.eventContainer}>
-          <TimeSlot
+          <Timeslot
             key={`${day},${slot}`}
             timeStart={timeStart}
             day={day}
@@ -396,6 +394,7 @@ class Schedule extends Component {
       const oneDay = 24 * 60 * 60 * 1000;
       const numDays = Math.round((timeMax - timeMin) / oneDay);
       const hours = 14; // For now, we have 14 hours in a day
+      const slotsPerHour = 2; // For now, we have 2 slots per hour (30 min)
       const timeStart = 9; // For now, start at 9am hardcoded
       const schedule = [];
 
@@ -406,7 +405,9 @@ class Schedule extends Component {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       for (let i = 0; i < numDays; i++) {
-        schedule.push(this.renderDay(i, hours, numDays, timeStart));
+        schedule.push(
+          this.renderDay(i, hours, numDays, timeStart, slotsPerHour)
+        );
       }
 
       return (
@@ -427,7 +428,14 @@ class Schedule extends Component {
               </div>
               <div className={styles.rightColumn}>
                 <div className={styles.dayLabels}>{dayLabels}</div>
-                <div className={styles.weeklySchedule}>{schedule}</div>
+                <div className={styles.scheduleContainer}>
+                  <div className={styles.weeklySchedule}>{schedule}</div>
+                  <TimeslotSelectorZone
+                    className={styles.timeslotSelectorZone}
+                    numDays={numDays}
+                    numSlotsPerDay={hours * slotsPerHour}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -448,6 +456,196 @@ class Schedule extends Component {
           <p>Loading...</p>
         </div>
       </>
+    );
+  }
+}
+
+class TimeslotSelectorZone extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // selected & currentSelected (map: slot -> boolean), a mapping of each
+      // slot to whether it is selected or not.
+      selected: this.initializeSelectedSlotsObject(
+        this.props.numDays,
+        this.props.numSlotsPerDay
+      ),
+      mouseIsDown: false,
+      // The starting slot for each selection during a mouseDown event.
+      startingSlot: [],
+      // Sort of like a cache (currentSelected) to the main memory (selected)
+      currentSelected: this.initializeSelectedSlotsObject(
+        this.props.numDays,
+        this.props.numSlotsPerDay
+      ),
+    };
+  }
+
+  // Create a map with numDays * numSlotsPerDay keys, all initialized to false.
+  initializeSelectedSlotsObject(numDays, numSlotsPerDay) {
+    let map = {};
+    for (let i = 0; i < numDays; i++) {
+      for (let j = 0; j < numSlotsPerDay; j++) {
+        map[`${i},${j}`] = false;
+      }
+    }
+    return map;
+  }
+
+  // Python range function. Works increasing or decreasing.
+  // Class function for now since we may need to do some state manipulation
+  // here... TBD.
+  range(start, end) {
+    if (start > end) {
+      return this.range(end, start).reverse();
+    } else if (start === end) return [start];
+    return [start, ...this.range(start + 1, end)];
+  }
+
+  // On the event that the mouse button is clicked on a timeslot, the state must
+  // change to reflect this click. We change the "mouseIsDown" state to be true
+  // and make the current timeslot the "coords" for the "startingSlot". We then
+  // toggle the truthity of the slot
+  mouseDown(i, j) {
+    this.setState({
+      mouseIsDown: true,
+      startingSlot: [i, j],
+    });
+  }
+
+  // On the event that the mouse button is lifted (assuming after it has been
+  // clicked), we change the state so that the "mouseIsDown" value is correct
+  // and "commit any changes" that we made to our timeslot selection zone
+  mouseUp() {
+    const newlySelected = { ...this.state.selected };
+    let [si, sj] = this.state.startingSlot;
+    if (this.state.selected[`${si},${sj}`]) {
+      for (const key in newlySelected) {
+        newlySelected[key] =
+          this.state.currentSelected[key] !== newlySelected[key] &&
+          newlySelected[key];
+      }
+    } else {
+      for (const key in newlySelected) {
+        newlySelected[key] =
+          this.state.currentSelected[key] || newlySelected[key];
+      }
+    }
+
+    this.setState({
+      mouseIsDown: false,
+      selected: newlySelected,
+      currentSelected: this.initializeSelectedSlotsObject(
+        this.props.numDays,
+        this.props.numSlotsPerDay
+      )
+    });
+  }
+
+  // If the cursor is down and is hovering over a slot, we want to change the
+  // zone from the starting slot to the current slot the cursor is on to
+  // respectively change the selection.
+  mouseOver(i, j) {
+    let [si, sj] = this.state.startingSlot;
+
+    if (this.state.mouseIsDown) {
+      // Reset the cache to only select the range between the starting slot and
+      // the slot we are hovering over
+      this.setState({
+        currentSelected: this.initializeSelectedSlotsObject(
+          this.props.numDays,
+          this.props.numSlotsPerDay
+        ),
+      });
+      this.range(si, i).forEach((num1) => {
+        this.range(sj, j).forEach((num2) => {
+          this.timeslotSelected(num1, num2);
+        });
+      });
+    }
+  }
+
+  // Triggered to ensure that the selected timeslots are committed when leaving 
+  // the selector zone.
+  mouseLeave() {
+    if (this.state.mouseIsDown) {
+      this.mouseUp();
+    }
+  }
+
+  // Update the respective slot depending on the starting slot.
+  // If the starting slot was "selected", only deselect selected slots
+  // If the starting slot was "unselected" only select deselected slots
+  timeslotSelected(day, slot) {
+    this.setState((state) => {
+      const updatedSelected = { ...state.currentSelected };
+      updatedSelected[`${day},${slot}`] = true;
+      return { currentSelected: updatedSelected };
+    });
+  }
+
+  // Update the respective slot depending on its previous value
+  timeslotClicked(day, slot) {
+    this.setState((state) => {
+      const updatedSelected = { ...state.selected };
+      updatedSelected[`${day},${slot}`] = !state.selected[`${day},${slot}`];
+      return { selected: updatedSelected };
+    });
+  }
+
+  renderDay(i) {
+    const dayZone = [];
+    const [si, sj] = this.state?.startingSlot;
+    for (let j = 0; j < this.props.numSlotsPerDay; j++) {
+      dayZone.push(
+        /* Logic for color:
+         * Case 1: Currently selecting regions:
+         *   Starting slot is selected (i.e. deselecting the region) -> red
+         *   Starting slot is not selected (i.e. selecting the region) -> green
+         * Case 2: Not currently selecting regions:
+         *   Selected regions -> blue
+         *   Unselected regions -> transparent
+        */
+        <div
+          className={`${styles.timeslotOverlay} ${this.state.selected[`${si},${sj}`]
+            && this.state.currentSelected[`${i},${j}`]
+            ? styles.deselectedTimeslot
+            : this.state.currentSelected[`${i},${j}`]
+              ? styles.currentSelectedTimeslot
+              : this.state.selected[`${i},${j}`]
+                ? styles.selectedTimeslot
+                : styles.unselectedTimeslot
+            }`}
+          key={`${i},${j}`}
+          onClick={() => this.timeslotClicked(i, j)}
+          onMouseDown={() => this.mouseDown(i, j)}
+          onMouseUp={() => this.mouseUp()}
+          onMouseOver={() => this.mouseOver(i, j)}
+        ></div>
+      );
+    }
+    return (
+      <div key={i} style={{ flexBasis: `${100 / this.props.numDays}%` }}>
+        {dayZone}
+      </div>
+    );
+  }
+
+  render() {
+    const zone = [];
+    const numDays = this.props.numDays;
+
+    for (let i = 0; i < numDays; i++) {
+      zone.push(this.renderDay(i));
+    }
+
+    return (
+      <div
+        className={this.props.className}
+        onMouseLeave={() => this.mouseLeave()}
+      >
+        {zone}
+      </div>
     );
   }
 }
