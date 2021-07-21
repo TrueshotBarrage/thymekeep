@@ -17,13 +17,13 @@ app
       const hostname =
         req.hostname === "www.thymekeep.com" ? "thymekeep.com" : req.hostname;
 
-      if (
-        req.headers["x-forwarded-proto"] === "http" ||
-        req.hostname === "www.thymekeep.com"
-      ) {
-        // res.redirect(301, `https://${hostname}${req.url}`);
-        return;
-      }
+      // if (
+      //   req.headers["x-forwarded-proto"] === "http" ||
+      //   req.hostname === "www.thymekeep.com"
+      // ) {
+      //   res.redirect(301, `https://${hostname}${req.url}`);
+      //   return;
+      // }
 
       res.setHeader(
         "strict-transport-security",
