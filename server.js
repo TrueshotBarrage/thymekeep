@@ -21,7 +21,7 @@ app
         req.headers["x-forwarded-proto"] === "http" ||
         req.hostname === "www.thymekeep.com"
       ) {
-        res.redirect(301, `https://${hostname}${req.url}`);
+        // res.redirect(301, `https://${hostname}${req.url}`);
         return;
       }
 
