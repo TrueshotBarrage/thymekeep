@@ -481,6 +481,10 @@ class TimeslotSelectorZone extends Component {
     };
   }
 
+  preventDefault(e) {
+    e.preventDefault();
+  }
+
   // Create a map with numDays * numSlotsPerDay keys, all initialized to false.
   initializeSelectedSlotsObject(numDays, numSlotsPerDay) {
     let map = {};
@@ -538,7 +542,7 @@ class TimeslotSelectorZone extends Component {
       currentSelected: this.initializeSelectedSlotsObject(
         this.props.numDays,
         this.props.numSlotsPerDay
-      )
+      ),
     });
   }
 
@@ -565,7 +569,7 @@ class TimeslotSelectorZone extends Component {
     }
   }
 
-  // Triggered to ensure that the selected timeslots are committed when leaving 
+  // Triggered to ensure that the selected timeslots are committed when leaving
   // the selector zone.
   mouseLeave() {
     if (this.state.mouseIsDown) {
@@ -605,17 +609,18 @@ class TimeslotSelectorZone extends Component {
          * Case 2: Not currently selecting regions:
          *   Selected regions -> blue
          *   Unselected regions -> transparent
-        */
+         */
         <div
-          className={`${styles.timeslotOverlay} ${this.state.selected[`${si},${sj}`]
-            && this.state.currentSelected[`${i},${j}`]
-            ? styles.deselectedTimeslot
-            : this.state.currentSelected[`${i},${j}`]
+          className={`${styles.timeslotOverlay} ${
+            this.state.selected[`${si},${sj}`] &&
+            this.state.currentSelected[`${i},${j}`]
+              ? styles.deselectedTimeslot
+              : this.state.currentSelected[`${i},${j}`]
               ? styles.currentSelectedTimeslot
               : this.state.selected[`${i},${j}`]
-                ? styles.selectedTimeslot
-                : styles.unselectedTimeslot
-            }`}
+              ? styles.selectedTimeslot
+              : styles.unselectedTimeslot
+          }`}
           key={`${i},${j}`}
           onClick={() => this.timeslotClicked(i, j)}
           onMouseDown={() => this.mouseDown(i, j)}
@@ -643,6 +648,7 @@ class TimeslotSelectorZone extends Component {
       <div
         className={this.props.className}
         onMouseLeave={() => this.mouseLeave()}
+        onMouseDown={this.preventDefault}
       >
         {zone}
       </div>
