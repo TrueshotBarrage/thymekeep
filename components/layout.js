@@ -2,10 +2,11 @@ import React from "react";
 import Link from "next/link";
 import styles from "./layout.module.css";
 import ActiveLink from "./activeLink";
-import { useSession, signIn, signOut } from "next-auth/client";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Layout = ({ children, className }) => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   return (
     <div className={!session && loading ? styles.loading : styles.loaded}>

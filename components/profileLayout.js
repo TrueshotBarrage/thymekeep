@@ -1,9 +1,10 @@
 import styles from "./profileLayout.module.css";
 import ActiveLink from "./activeLink";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 
 const ProfileLayout = ({ children }) => {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   return (
     <div className={styles.container}>

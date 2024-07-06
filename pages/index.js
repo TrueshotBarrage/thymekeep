@@ -1,11 +1,12 @@
 import Schedule from "../components/schedule";
 import Layout from "../components/layout";
 import styles from "../styles/utils.module.css";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import React from "react";
 
 export default function Index() {
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession();
+  const loading = status === "loading";
 
   return (
     <>

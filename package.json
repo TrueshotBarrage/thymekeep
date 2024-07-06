@@ -8,12 +8,12 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.7.2",
     "express": "^4.17.1",
     "googleapis": "^67.1.1",
-    "next": "10.0.5",
-    "next-auth": "^3.13.2",
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "next": "^14.2.4",
+    "next-auth": "^4.24.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

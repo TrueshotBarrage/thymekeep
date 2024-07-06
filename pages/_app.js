@@ -1,13 +1,13 @@
 import React from "react";
 import App from "next/app";
 import "../styles/globals.css";
-import { Provider } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Provider
+      <SessionProvider
         // Provider options are not required but can be useful in situations
         // where you have a short session maxAge time. Shown here with default
         // values.
@@ -29,7 +29,7 @@ class MyApp extends App {
         session={pageProps.session}
       >
         <Component {...pageProps} />
-      </Provider>
+      </SessionProvider>
     );
   }
 }
